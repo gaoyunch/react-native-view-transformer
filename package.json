@@ -2,7 +2,7 @@
   "name": "@gaoyunch/react-native-view-transformer",
   "version": "0.1.0",
   "description": "A pure JavaScript RN component that makes ANY views transformable using gestures like pinch, double tap or pull.",
-  "main": "library/index.js",
+  "main": "library/index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
