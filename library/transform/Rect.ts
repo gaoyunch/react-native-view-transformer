@@ -1,15 +1,19 @@
 'use strict';
 
 export default class Rect {
+  left: number;
+  top: number;
+  right: number;
+  bottom: number;
 
-  constructor(left, top, right, bottom) {
+  constructor(left?: number, top?: number, right?: number, bottom?: number) {
     this.left = left;
     this.top = top;
     this.right = right;
     this.bottom = bottom;
   }
 
-  set(left, top, right, bottom) {
+  set(left: number, top: number, right: number, bottom: number) {
     this.left = left;
     this.top = top;
     this.right = right;
@@ -32,7 +36,7 @@ export default class Rect {
     return (this.top + this.bottom) / 2;
   }
 
-  offset(dx, dy) {
+  offset(dx: number, dy: number) {
     this.left += dx;
     this.right += dx;
     this.top += dy;
@@ -45,7 +49,7 @@ export default class Rect {
   }
 
 
-  equals(rect:Rect) {
+  equals(rect: Rect) {
     return this.left === rect.left && this.top === rect.top && this.right === rect.right && this.bottom && rect.bottom;
   }
 

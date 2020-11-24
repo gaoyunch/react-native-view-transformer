@@ -2,10 +2,19 @@
 
 import Rect from './Rect';
 
-export {Rect};
+export { Rect };
 
+type Pivot = {
+  x: number
+  y: number
+}
 export class Transform {
-  constructor(scale, translateX, translateY, pivot) {
+  scale: number;
+  translateX: number;
+  translateY: number;
+  pivot?: Pivot;
+
+  constructor(scale: number, translateX: number, translateY: number, pivot?: Pivot) {
     this.scale = scale;
     this.translateX = translateX;
     this.translateY = translateY;
@@ -13,7 +22,7 @@ export class Transform {
   }
 }
 
-function isValidNumber(number) {
+const isValidNumber = (number: number) => {
   if (typeof number === 'number') {
     if (!isNaN(number)) {
       return true;
@@ -22,21 +31,21 @@ function isValidNumber(number) {
   return false;
 }
 
-function isValidRect(rect) {
+const isValidRect = (rect: Rect) => {
   if (rect instanceof Rect && rect.isValid()) {
     return true;
   }
   return false;
 }
 
-function isValidTransform(transform) {
+const isValidTransform = (transform: Transform) => {
   if (transform && isValidNumber(transform.scale) && isValidNumber(transform.translateX) && isValidNumber(transform.translateY)) {
     return true;
   }
   return false;
 }
 
-export function fitCenterRect(contentAspectRatio, containerRect:Rect) {
+export const fitCenterRect = (contentAspectRatio: number, containerRect: Rect) => {
   let w = containerRect.width();
   let h = containerRect.height();
   let viewAspectRatio = w / h;
@@ -59,11 +68,8 @@ export function fitCenterRect(contentAspectRatio, containerRect:Rect) {
 /**
  * The React Native transform system use the center of the view as the pivot when scaling.
  * The translations are applied before scaling.
- * @param rect
- * @param transform
- * @returns {*}
  */
-export function transformedRect(rect:Rect, transform:Transform) {
+export const transformedRect = (rect: Rect, transform: Transform) => {
   if (!isValidRect(rect)) {
     throw new Error('transformedRect...invalid rect');
   }
@@ -96,9 +102,7 @@ export function transformedRect(rect:Rect, transform:Transform) {
     }
 
     //first make the center still
-    let resultRect = transformedRect(rect, {
-      scale, translateX, translateY
-    });
+    let resultRect = transformedRect(rect, { scale, translateX, translateY });
 
     //the pivot moved during scaling, now move it back
     let dx = (scale - 1) * (pivotX - resultRect.centerX());
@@ -109,11 +113,8 @@ export function transformedRect(rect:Rect, transform:Transform) {
 
 /**
  * Calculate the transform from fromRect to toRect
- * @param fromRect
- * @param toRect
- * @returns {Transform}
  */
-export function getTransform(fromRect, toRect) {
+export const getTransform = (fromRect: Rect, toRect: Rect) => {
   let scale = toRect.width() / fromRect.width();
   let translateX = (toRect.centerX() - fromRect.centerX()) / scale;
   let translateY = (toRect.centerY() - fromRect.centerY()) / scale;
@@ -123,11 +124,8 @@ export function getTransform(fromRect, toRect) {
 
 /**
  * Align edges of the rect with the viewport to avoid unnecessary blank space. NO scaling is performed here.
- * @param rect
- * @param viewPortRect
- * @returns {*|{line, column}|{column, line}|{x}}
  */
-export function alignedRect(rect:Rect, viewPortRect:Rect) {
+export const alignedRect = (rect: Rect, viewPortRect: Rect) => {
   let dx = 0, dy = 0;
 
   if (rect.width() > viewPortRect.width()) {
@@ -153,7 +151,7 @@ export function alignedRect(rect:Rect, viewPortRect:Rect) {
   return rect.copy().offset(dx, dy);
 }
 
-export function availableTranslateSpace(rect, viewPortRect) {
+export const availableTranslateSpace = (rect: Rect, viewPortRect: Rect) => {
   return {
     left: viewPortRect.left - rect.left,
     right: rect.right - viewPortRect.right,
